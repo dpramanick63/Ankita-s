@@ -1,427 +1,582 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Menu, X, Instagram, 
-  Clock, Sparkles, Heart, Star, ChevronRight, MessageCircle
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankita Sil Pyne Nail Art</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-// --- CUSTOM HOOKS & COMPONENTS FOR EFFECTS ---
-
-// Reusable component for scroll-triggered fade-in effects
-const FadeInSection = ({ children, delay = 0, direction = 'up' }) => {
-  const [isVisible, setVisible] = useState(false);
-  const domRef = useRef();
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.unobserve(domRef.current);
+    <!-- Custom Tailwind Styles for Navbar Scroll Effects -->
+    <style type="text/tailwindcss">
+        .nav-scrolled {
+            @apply bg-white/95 backdrop-blur-md shadow-md py-3;
         }
-      });
-    }, { threshold: 0.15 });
-    
-    const currentRef = domRef.current;
-    if (currentRef) observer.observe(currentRef);
-    
-    return () => {
-      if (currentRef) observer.unobserve(currentRef);
-    };
-  }, []);
+        .nav-top {
+            @apply bg-transparent py-5;
+        }
+        .nav-scrolled .nav-text {
+            @apply text-stone-600;
+        }
+        .nav-top .nav-text {
+            @apply text-white drop-shadow-md;
+        }
+        .nav-scrolled .logo-text {
+            @apply text-stone-900;
+        }
+        .nav-top .logo-text {
+            @apply text-white drop-shadow-md;
+        }
+        .nav-scrolled .spark-icon {
+            @apply text-rose-500;
+        }
+        .nav-top .spark-icon {
+            @apply text-rose-400;
+        }
+        .nav-scrolled .menu-icon {
+            @apply text-stone-900;
+        }
+        .nav-top .menu-icon {
+            @apply text-white;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-stone-50 font-sans text-stone-800 overflow-x-hidden">
 
-  const getTranslateClass = () => {
-    if (isVisible) return 'translate-y-0 translate-x-0';
-    switch (direction) {
-      case 'up': return 'translate-y-12';
-      case 'down': return '-translate-y-12';
-      case 'left': return 'translate-x-12';
-      case 'right': return '-translate-x-12';
-      default: return 'translate-y-12';
-    }
-  };
-
-  return (
-    <div
-      ref={domRef}
-      className={`transition-all duration-1000 ease-out ${
-        isVisible ? 'opacity-100' : 'opacity-0'
-      } ${getTranslateClass()}`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {children}
-    </div>
-  );
-};
-
-// --- MAIN APPLICATION ---
-
-export default function App() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Handle navbar background on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const services = [
-    { name: "Classic Manicure", price: "Starting at ₹499", desc: "Nail shaping, cuticle care, hand massage, and regular polish.", icon: <Heart className="w-6 h-6 text-rose-500" /> },
-    { name: "Gel Polish", price: "Starting at ₹899", desc: "Long-lasting, chip-resistant gel polish with a flawless glossy finish.", icon: <Sparkles className="w-6 h-6 text-rose-500" /> },
-    { name: "Acrylic Extensions", price: "Starting at ₹1499", desc: "Durable extensions tailored to your desired length and shape.", icon: <Star className="w-6 h-6 text-rose-500" /> },
-    { name: "Custom Nail Art", price: "Varies", desc: "Intricate hand-painted designs, 3D art, chrome, and rhinestones.", icon: <Heart className="w-6 h-6 text-rose-500" /> },
-    { name: "Luxury Pedicure", price: "Starting at ₹799", desc: "Relaxing foot soak, scrub, massage, and perfect polish application.", icon: <Sparkles className="w-6 h-6 text-rose-500" /> },
-    { name: "Refills & Removal", price: "Starting at ₹399", desc: "Safe removal of gel/acrylics or infills to keep your nails fresh.", icon: <Star className="w-6 h-6 text-rose-500" /> },
-  ];
-
-  // Updated with highly reliable Unsplash image sources
-  const galleryImages = [
-    "https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1516975080661-422fc99d2bc1?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1594913837482-1c251d1f057c?auto=format&fit=crop&q=80&w=800",
-    "https://images.unsplash.com/photo-1588624132332-6bf59a1f3493?auto=format&fit=crop&q=80&w=800"
-  ];
-
-  return (
-    <div className="min-h-screen bg-stone-50 font-sans text-stone-800 overflow-x-hidden">
-      
-      {/* Floating WhatsApp Button */}
-      <a 
+    <!-- Floating WhatsApp Button -->
+    <a 
         href="https://wa.me/919876543210" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-green-500 text-white p-4 rounded-full shadow-xl hover:bg-green-600 transition-all hover:scale-110 flex items-center justify-center group"
-      >
-        <MessageCircle className="w-6 h-6" />
-        <span className="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-300 ease-in-out pl-0 group-hover:pl-2 font-medium">
-          Book on WhatsApp
+        class="fixed bottom-6 right-6 z-50 bg-green-500 text-white p-4 rounded-full shadow-xl hover:bg-green-600 transition-all hover:scale-110 flex items-center justify-center group"
+    >
+        <i data-lucide="message-circle" class="w-6 h-6"></i>
+        <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-300 ease-in-out pl-0 group-hover:pl-2 font-medium">
+            Book on WhatsApp
         </span>
-      </a>
+    </a>
 
-      {/* Navigation */}
-      <nav className={`fixed w-full z-40 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-3' : 'bg-transparent py-5'}`}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Sparkles className={`w-6 h-6 ${isScrolled ? 'text-rose-500' : 'text-rose-400'}`} />
-            <span className={`text-2xl font-serif font-bold tracking-wider ${isScrolled ? 'text-stone-900' : 'text-white drop-shadow-md'}`}>
-              ANKITA SIL PYNE
-            </span>
-          </div>
-
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-8">
-            {['Home', 'About', 'Services', 'Gallery'].map((item) => (
-              <a 
-                key={item} 
-                href={`#${item.toLowerCase()}`} 
-                className={`text-sm font-medium uppercase tracking-widest hover:text-rose-400 transition-colors ${isScrolled ? 'text-stone-600' : 'text-white drop-shadow-md'}`}
-              >
-                {item}
-              </a>
-            ))}
-            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="bg-rose-500 text-white px-6 py-2.5 rounded-full text-sm font-medium uppercase tracking-wider hover:bg-rose-600 transition-colors shadow-lg shadow-rose-500/30">
-              Book Now
-            </a>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden p-2"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <X className={`w-6 h-6 ${isScrolled ? 'text-stone-900' : 'text-white'}`} />
-            ) : (
-              <Menu className={`w-6 h-6 ${isScrolled ? 'text-stone-900' : 'text-white'}`} />
-            )}
-          </button>
-        </div>
-
-        {/* Mobile Nav Dropdown */}
-        <div className={`md:hidden absolute top-full left-0 w-full bg-white shadow-xl transition-all duration-300 overflow-hidden ${isMobileMenuOpen ? 'max-h-96 border-t border-stone-100' : 'max-h-0'}`}>
-          <div className="flex flex-col py-4 px-6 space-y-4">
-            {['Home', 'About', 'Services', 'Gallery'].map((item) => (
-              <a 
-                key={item} 
-                href={`#${item.toLowerCase()}`} 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-stone-600 font-medium uppercase tracking-wider py-2 border-b border-stone-100"
-              >
-                {item}
-              </a>
-            ))}
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image with Overlay */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&q=80&w=2000" 
-            alt="Beautiful nail art" 
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-stone-900/80 to-stone-900/40"></div>
-        </div>
-
-        {/* Hero Content */}
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
-          <FadeInSection direction="up" delay={100}>
-            <span className="text-rose-300 font-medium tracking-[0.3em] uppercase mb-4 block">
-              Premium Nail Art Studio
-            </span>
-          </FadeInSection>
-          <FadeInSection direction="up" delay={300}>
-            <h1 className="text-5xl md:text-7xl font-serif text-white mb-6 leading-tight drop-shadow-lg">
-              Elevate Your <span className="text-rose-400 italic">Elegance</span>
-            </h1>
-          </FadeInSection>
-          <FadeInSection direction="up" delay={500}>
-            <p className="text-stone-200 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light leading-relaxed">
-              Discover the art of perfect nails with Ankita Sil Pyne. Specialized in bespoke nail artistry, extensions, and luxurious nail care.
-            </p>
-          </FadeInSection>
-          <FadeInSection direction="up" delay={700}>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto bg-rose-500 text-white px-8 py-4 rounded-full font-medium tracking-wide hover:bg-rose-600 transition-all shadow-lg shadow-rose-500/40 hover:-translate-y-1">
-                Book an Appointment
-              </a>
-              <a href="#gallery" className="w-full sm:w-auto bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-full font-medium tracking-wide hover:bg-white/20 transition-all">
-                View Gallery
-              </a>
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed w-full z-40 transition-all duration-500 nav-top">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-6 h-6 spark-icon transition-colors"></i>
+                <span class="text-2xl font-serif font-bold tracking-wider logo-text transition-colors">
+                    ANKITA SIL PYNE
+                </span>
             </div>
-          </FadeInSection>
-        </div>
-      </section>
 
-      {/* About Section */}
-      <section id="about" className="py-24 bg-white relative">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <FadeInSection direction="right">
-              <div className="relative">
-                <div className="absolute inset-0 bg-rose-200 rounded-3xl translate-x-4 translate-y-4 -z-10"></div>
-                <img 
-                  src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Nail studio ambiance" 
-                  className="rounded-3xl shadow-2xl w-full object-cover h-[500px]"
-                />
-                <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-xl hidden md:block">
-                  <div className="flex items-center gap-4">
-                    <div className="bg-rose-100 p-3 rounded-full text-rose-500">
-                      <Star className="w-8 h-8 fill-current" />
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="text-sm font-medium uppercase tracking-widest hover:text-rose-400 transition-colors nav-text">Home</a>
+                <a href="#about" class="text-sm font-medium uppercase tracking-widest hover:text-rose-400 transition-colors nav-text">About</a>
+                <a href="#services" class="text-sm font-medium uppercase tracking-widest hover:text-rose-400 transition-colors nav-text">Services</a>
+                <a href="#gallery" class="text-sm font-medium uppercase tracking-widest hover:text-rose-400 transition-colors nav-text">Gallery</a>
+                
+                <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" class="bg-rose-500 text-white px-6 py-2.5 rounded-full text-sm font-medium uppercase tracking-wider hover:bg-rose-600 transition-colors shadow-lg shadow-rose-500/30">
+                    Book Now
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden p-2">
+                <i id="icon-menu" data-lucide="menu" class="w-6 h-6 menu-icon transition-colors"></i>
+                <i id="icon-x" data-lucide="x" class="w-6 h-6 menu-icon transition-colors hidden"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Nav Dropdown -->
+        <div id="mobile-menu" class="md:hidden absolute top-full left-0 w-full bg-white shadow-xl transition-all duration-300 overflow-hidden max-h-0">
+            <div class="flex flex-col py-4 px-6 space-y-4">
+                <a href="#home" class="mobile-link text-stone-600 font-medium uppercase tracking-wider py-2 border-b border-stone-100">Home</a>
+                <a href="#about" class="mobile-link text-stone-600 font-medium uppercase tracking-wider py-2 border-b border-stone-100">About</a>
+                <a href="#services" class="mobile-link text-stone-600 font-medium uppercase tracking-wider py-2 border-b border-stone-100">Services</a>
+                <a href="#gallery" class="mobile-link text-stone-600 font-medium uppercase tracking-wider py-2 border-b border-stone-100">Gallery</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img 
+                src="https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&q=80&w=2000" 
+                alt="Beautiful nail art" 
+                class="w-full h-full object-cover object-center"
+            />
+            <div class="absolute inset-0 bg-gradient-to-r from-stone-900/80 to-stone-900/40"></div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
+            <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="100">
+                <span class="text-rose-300 font-medium tracking-[0.3em] uppercase mb-4 block">
+                    Premium Nail Art Studio
+                </span>
+            </div>
+            <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="300">
+                <h1 class="text-5xl md:text-7xl font-serif text-white mb-6 leading-tight drop-shadow-lg">
+                    Elevate Your <span class="text-rose-400 italic">Elegance</span>
+                </h1>
+            </div>
+            <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="500">
+                <p class="text-stone-200 text-lg md:text-xl mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                    Discover the art of perfect nails with Ankita Sil Pyne. Specialized in bespoke nail artistry, extensions, and luxurious nail care.
+                </p>
+            </div>
+            <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="700">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto bg-rose-500 text-white px-8 py-4 rounded-full font-medium tracking-wide hover:bg-rose-600 transition-all shadow-lg shadow-rose-500/40 hover:-translate-y-1">
+                        Book an Appointment
+                    </a>
+                    <a href="#gallery" class="w-full sm:w-auto bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-full font-medium tracking-wide hover:bg-white/20 transition-all">
+                        View Gallery
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="right" data-delay="0">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-rose-200 rounded-3xl translate-x-4 translate-y-4 -z-10"></div>
+                        <img 
+                            src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=1000" 
+                            alt="Nail studio ambiance" 
+                            class="rounded-3xl shadow-2xl w-full object-cover h-[500px]"
+                        />
+                        <div class="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-xl hidden md:block">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-rose-100 p-3 rounded-full text-rose-500">
+                                    <i data-lucide="star" class="w-8 h-8 fill-current"></i>
+                                </div>
+                                <div>
+                                    <p class="text-3xl font-bold text-stone-800">5+</p>
+                                    <p class="text-stone-500 text-sm font-medium uppercase tracking-wider">Years Experience</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="left" data-delay="200">
                     <div>
-                      <p className="text-3xl font-bold text-stone-800">5+</p>
-                      <p className="text-stone-500 text-sm font-medium uppercase tracking-wider">Years Experience</p>
+                        <span class="text-rose-500 font-bold tracking-widest uppercase text-sm mb-2 block">About The Artist</span>
+                        <h2 class="text-4xl md:text-5xl font-serif text-stone-900 mb-6">Meet Ankita Sil Pyne</h2>
+                        <p class="text-stone-600 mb-6 text-lg leading-relaxed">
+                            With a profound passion for beauty and an eye for intricate detail, I transform ordinary nails into miniature masterpieces. Every client is a blank canvas, and every set of nails is a unique work of art tailored to your personality and style.
+                        </p>
+                        <p class="text-stone-600 mb-8 text-lg leading-relaxed">
+                            Using only premium quality products and the latest techniques, I ensure your nails not only look stunning but remain healthy and strong. Whether you desire a classic French manicure or elaborate 3D embellishments, your satisfaction is my priority.
+                        </p>
+                        
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-center gap-3 text-stone-700 font-medium">
+                                <i data-lucide="heart" class="w-5 h-5 text-rose-400 fill-rose-100"></i> Certified Nail Technician
+                            </li>
+                            <li class="flex items-center gap-3 text-stone-700 font-medium">
+                                <i data-lucide="heart" class="w-5 h-5 text-rose-400 fill-rose-100"></i> Premium Quality Products
+                            </li>
+                            <li class="flex items-center gap-3 text-stone-700 font-medium">
+                                <i data-lucide="heart" class="w-5 h-5 text-rose-400 fill-rose-100"></i> Hygienic & Safe Environment
+                            </li>
+                            <li class="flex items-center gap-3 text-stone-700 font-medium">
+                                <i data-lucide="heart" class="w-5 h-5 text-rose-400 fill-rose-100"></i> Customized Consultations
+                            </li>
+                        </ul>
+                        
+                        <div class="font-serif italic text-3xl text-stone-300 mt-6 select-none">
+                            Ankita Sil Pyne
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
-            </FadeInSection>
-            
-            <FadeInSection direction="left" delay={200}>
-              <div>
-                <span className="text-rose-500 font-bold tracking-widest uppercase text-sm mb-2 block">About The Artist</span>
-                <h2 className="text-4xl md:text-5xl font-serif text-stone-900 mb-6">Meet Ankita Sil Pyne</h2>
-                <p className="text-stone-600 mb-6 text-lg leading-relaxed">
-                  With a profound passion for beauty and an eye for intricate detail, I transform ordinary nails into miniature masterpieces. Every client is a blank canvas, and every set of nails is a unique work of art tailored to your personality and style.
-                </p>
-                <p className="text-stone-600 mb-8 text-lg leading-relaxed">
-                  Using only premium quality products and the latest techniques, I ensure your nails not only look stunning but remain healthy and strong. Whether you desire a classic French manicure or elaborate 3D embellishments, your satisfaction is my priority.
-                </p>
-                
-                <ul className="space-y-4 mb-8">
-                  {['Certified Nail Technician', 'Premium Quality Products', 'Hygienic & Safe Environment', 'Customized Consultations'].map((item, idx) => (
-                    <li key={idx} className="flex items-center gap-3 text-stone-700 font-medium">
-                      <Heart className="w-5 h-5 text-rose-400 fill-rose-100" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                
-                {/* Replaced broken image signature with a stylized text signature */}
-                <div className="font-serif italic text-3xl text-stone-300 mt-6 select-none">
-                  Ankita Sil Pyne
-                </div>
-              </div>
-            </FadeInSection>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section id="services" className="py-24 bg-stone-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <FadeInSection direction="up">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <span className="text-rose-500 font-bold tracking-widest uppercase text-sm mb-2 block">Our Services</span>
-              <h2 className="text-4xl md:text-5xl font-serif text-stone-900 mb-6">Pamper Yourself</h2>
-              <p className="text-stone-600 text-lg">Indulge in our range of luxury nail care services designed to make you feel confident and beautiful.</p>
             </div>
-          </FadeInSection>
+        </div>
+    </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <FadeInSection key={index} delay={index * 100} direction="up">
-                <div className="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 group hover:-translate-y-2">
-                  <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 transition-colors duration-300">
-                    <div className="group-hover:text-white transition-colors duration-300 text-rose-500">
-                      {service.icon}
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-stone-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="fade-in transition-all duration-1000 ease-out opacity-0 text-center max-w-2xl mx-auto mb-16" data-direction="up" data-delay="0">
+                <span class="text-rose-500 font-bold tracking-widest uppercase text-sm mb-2 block">Our Services</span>
+                <h2 class="text-4xl md:text-5xl font-serif text-stone-900 mb-6">Pamper Yourself</h2>
+                <p class="text-stone-600 text-lg">Indulge in our range of luxury nail care services designed to make you feel confident and beautiful.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="0">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 group hover:-translate-y-2">
+                        <div class="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 transition-colors duration-300">
+                            <div class="group-hover:text-white transition-colors duration-300 text-rose-500">
+                                <i data-lucide="heart" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-serif text-stone-900 mb-3">Classic Manicure</h3>
+                        <p class="text-stone-500 mb-6 leading-relaxed min-h-[48px]">Nail shaping, cuticle care, hand massage, and regular polish.</p>
+                        <div class="flex items-center justify-between pt-6 border-t border-stone-100">
+                            <span class="font-semibold text-rose-500">Starting at ₹499</span>
+                            <button class="text-stone-400 group-hover:text-rose-500 transition-colors">
+                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
                     </div>
-                  </div>
-                  <h3 className="text-2xl font-serif text-stone-900 mb-3">{service.name}</h3>
-                  <p className="text-stone-500 mb-6 leading-relaxed min-h-[48px]">{service.desc}</p>
-                  <div className="flex items-center justify-between pt-6 border-t border-stone-100">
-                    <span className="font-semibold text-rose-500">{service.price}</span>
-                    <button className="text-stone-400 group-hover:text-rose-500 transition-colors">
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </div>
                 </div>
-              </FadeInSection>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Banner / CTA */}
-      <section className="py-20 bg-rose-900 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.8)_0,transparent_100%)]"></div>
-        </div>
-        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <FadeInSection direction="up">
-            <h2 className="text-3xl md:text-5xl font-serif text-rose-50 mb-6 leading-tight">
-              Ready to give your nails the attention they deserve?
-            </h2>
-            <p className="text-rose-200 text-lg mb-10">
-              Book your session today and step out with flawless, beautiful nails.
-            </p>
-            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="inline-block bg-white text-rose-900 px-10 py-4 rounded-full font-bold tracking-wide hover:bg-rose-50 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
-              Schedule Now
-            </a>
-          </FadeInSection>
-        </div>
-      </section>
+                <!-- Service 2 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="100">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 group hover:-translate-y-2">
+                        <div class="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 transition-colors duration-300">
+                            <div class="group-hover:text-white transition-colors duration-300 text-rose-500">
+                                <i data-lucide="sparkles" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-serif text-stone-900 mb-3">Gel Polish</h3>
+                        <p class="text-stone-500 mb-6 leading-relaxed min-h-[48px]">Long-lasting, chip-resistant gel polish with a flawless glossy finish.</p>
+                        <div class="flex items-center justify-between pt-6 border-t border-stone-100">
+                            <span class="font-semibold text-rose-500">Starting at ₹899</span>
+                            <button class="text-stone-400 group-hover:text-rose-500 transition-colors">
+                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-      {/* Gallery Section */}
-      <section id="gallery" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <FadeInSection direction="up">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-              <div className="max-w-2xl">
-                <span className="text-rose-500 font-bold tracking-widest uppercase text-sm mb-2 block">Portfolio</span>
-                <h2 className="text-4xl md:text-5xl font-serif text-stone-900 mb-4">Our Masterpieces</h2>
-                <p className="text-stone-600 text-lg">A glimpse into our artistry. Follow us on Instagram for daily inspiration.</p>
-              </div>
-              <a href="#" className="flex items-center gap-2 text-rose-500 font-medium hover:text-rose-600 transition-colors">
-                <Instagram className="w-5 h-5" />
-                @ankitasilpyne_nails
-              </a>
+                <!-- Service 3 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="200">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 group hover:-translate-y-2">
+                        <div class="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 transition-colors duration-300">
+                            <div class="group-hover:text-white transition-colors duration-300 text-rose-500">
+                                <i data-lucide="star" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-serif text-stone-900 mb-3">Acrylic Extensions</h3>
+                        <p class="text-stone-500 mb-6 leading-relaxed min-h-[48px]">Durable extensions tailored to your desired length and shape.</p>
+                        <div class="flex items-center justify-between pt-6 border-t border-stone-100">
+                            <span class="font-semibold text-rose-500">Starting at ₹1499</span>
+                            <button class="text-stone-400 group-hover:text-rose-500 transition-colors">
+                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="300">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 group hover:-translate-y-2">
+                        <div class="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 transition-colors duration-300">
+                            <div class="group-hover:text-white transition-colors duration-300 text-rose-500">
+                                <i data-lucide="heart" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-serif text-stone-900 mb-3">Custom Nail Art</h3>
+                        <p class="text-stone-500 mb-6 leading-relaxed min-h-[48px]">Intricate hand-painted designs, 3D art, chrome, and rhinestones.</p>
+                        <div class="flex items-center justify-between pt-6 border-t border-stone-100">
+                            <span class="font-semibold text-rose-500">Varies</span>
+                            <button class="text-stone-400 group-hover:text-rose-500 transition-colors">
+                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="400">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 group hover:-translate-y-2">
+                        <div class="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 transition-colors duration-300">
+                            <div class="group-hover:text-white transition-colors duration-300 text-rose-500">
+                                <i data-lucide="sparkles" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-serif text-stone-900 mb-3">Luxury Pedicure</h3>
+                        <p class="text-stone-500 mb-6 leading-relaxed min-h-[48px]">Relaxing foot soak, scrub, massage, and perfect polish application.</p>
+                        <div class="flex items-center justify-between pt-6 border-t border-stone-100">
+                            <span class="font-semibold text-rose-500">Starting at ₹799</span>
+                            <button class="text-stone-400 group-hover:text-rose-500 transition-colors">
+                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="500">
+                    <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100 group hover:-translate-y-2">
+                        <div class="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 transition-colors duration-300">
+                            <div class="group-hover:text-white transition-colors duration-300 text-rose-500">
+                                <i data-lucide="star" class="w-6 h-6"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-serif text-stone-900 mb-3">Refills & Removal</h3>
+                        <p class="text-stone-500 mb-6 leading-relaxed min-h-[48px]">Safe removal of gel/acrylics or infills to keep your nails fresh.</p>
+                        <div class="flex items-center justify-between pt-6 border-t border-stone-100">
+                            <span class="font-semibold text-rose-500">Starting at ₹399</span>
+                            <button class="text-stone-400 group-hover:text-rose-500 transition-colors">
+                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </FadeInSection>
-
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {galleryImages.map((src, index) => (
-              <FadeInSection key={index} delay={index * 100} direction="up">
-                <div className="group relative overflow-hidden rounded-2xl aspect-[4/5]">
-                  <img 
-                    src={src} 
-                    alt={`Nail Art ${index + 1}`} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-8">
-                    <Heart className="text-white w-8 h-8 hover:text-rose-400 transition-colors cursor-pointer" />
-                  </div>
-                </div>
-              </FadeInSection>
-            ))}
-          </div>
         </div>
-      </section>
+    </section>
 
-      {/* Footer */}
-      <footer className="bg-stone-900 text-stone-300 pt-24 pb-12">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          {/* Changed from grid-cols-4 to grid-cols-3 to center and balance after removing contact info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
-            
-            {/* Brand */}
-            <FadeInSection direction="up" delay={0}>
-              <div className="space-y-6">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-6 h-6 text-rose-400" />
-                  <span className="text-2xl font-serif font-bold tracking-wider text-white">
-                    ASP NAILS
-                  </span>
-                </div>
-                <p className="text-stone-400 leading-relaxed">
-                  Elevating your elegance through premium, personalized nail artistry. Where every detail matters.
+    <!-- Banner / CTA -->
+    <section class="py-20 bg-rose-900 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.8)_0,transparent_100%)]"></div>
+        </div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="0">
+                <h2 class="text-3xl md:text-5xl font-serif text-rose-50 mb-6 leading-tight">
+                    Ready to give your nails the attention they deserve?
+                </h2>
+                <p class="text-rose-200 text-lg mb-10">
+                    Book your session today and step out with flawless, beautiful nails.
                 </p>
-                <div className="flex gap-4">
-                  <a href="#" className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all">
-                    <Instagram className="w-5 h-5" />
-                  </a>
-                  <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all">
-                    <MessageCircle className="w-5 h-5" />
-                  </a>
-                </div>
-              </div>
-            </FadeInSection>
-
-            {/* Quick Links */}
-            <FadeInSection direction="up" delay={100}>
-              <div>
-                <h4 className="text-white font-bold uppercase tracking-wider mb-6">Explore</h4>
-                <ul className="space-y-3">
-                  {['Home', 'About Artist', 'Our Services', 'Gallery Portfolio'].map((item) => (
-                    <li key={item}>
-                      <a href={`#${item.split(' ')[0].toLowerCase()}`} className="hover:text-rose-400 transition-colors flex items-center gap-2">
-                        <ChevronRight className="w-4 h-4" /> {item}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </FadeInSection>
-
-            {/* Hours */}
-            <FadeInSection direction="up" delay={200}>
-              <div>
-                <h4 className="text-white font-bold uppercase tracking-wider mb-6">Opening Hours</h4>
-                <ul className="space-y-3">
-                  <li className="flex justify-between items-center border-b border-stone-800 pb-2">
-                    <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-stone-500"/> Mon - Fri</span>
-                    <span>10:00 AM - 8:00 PM</span>
-                  </li>
-                  <li className="flex justify-between items-center border-b border-stone-800 pb-2">
-                    <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-stone-500"/> Saturday</span>
-                    <span>10:00 AM - 9:00 PM</span>
-                  </li>
-                  <li className="flex justify-between items-center pb-2 text-rose-400">
-                    <span className="flex items-center gap-2"><Clock className="w-4 h-4"/> Sunday</span>
-                    <span>Closed</span>
-                  </li>
-                </ul>
-              </div>
-            </FadeInSection>
-
-          </div>
-
-          <div className="border-t border-stone-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-stone-500">
-            <p>&copy; {new Date().getFullYear()} Ankita Sil Pyne Nail Art. All rights reserved.</p>
-            <p>Designed with elegance.</p>
-          </div>
+                <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" class="inline-block bg-white text-rose-900 px-10 py-4 rounded-full font-bold tracking-wide hover:bg-rose-50 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
+                    Schedule Now
+                </a>
+            </div>
         </div>
-      </footer>
-    </div>
-  );
-}
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="0">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div class="max-w-2xl">
+                        <span class="text-rose-500 font-bold tracking-widest uppercase text-sm mb-2 block">Portfolio</span>
+                        <h2 class="text-4xl md:text-5xl font-serif text-stone-900 mb-4">Our Masterpieces</h2>
+                        <p class="text-stone-600 text-lg">A glimpse into our artistry. Follow us on Instagram for daily inspiration.</p>
+                    </div>
+                    <a href="#" class="flex items-center gap-2 text-rose-500 font-medium hover:text-rose-600 transition-colors">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                        @ankitasilpyne_nails
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <!-- Image 1 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="0">
+                    <div class="group relative overflow-hidden rounded-2xl aspect-[4/5]">
+                        <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&q=80&w=800" alt="Nail Art 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-8">
+                            <i data-lucide="heart" class="text-white w-8 h-8 hover:text-rose-400 transition-colors cursor-pointer"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image 2 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="100">
+                    <div class="group relative overflow-hidden rounded-2xl aspect-[4/5]">
+                        <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=800" alt="Nail Art 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-8">
+                            <i data-lucide="heart" class="text-white w-8 h-8 hover:text-rose-400 transition-colors cursor-pointer"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image 3 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="200">
+                    <div class="group relative overflow-hidden rounded-2xl aspect-[4/5]">
+                        <img src="https://images.unsplash.com/photo-1516975080661-422fc99d2bc1?auto=format&fit=crop&q=80&w=800" alt="Nail Art 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-8">
+                            <i data-lucide="heart" class="text-white w-8 h-8 hover:text-rose-400 transition-colors cursor-pointer"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image 4 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="300">
+                    <div class="group relative overflow-hidden rounded-2xl aspect-[4/5]">
+                        <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=800" alt="Nail Art 4" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-8">
+                            <i data-lucide="heart" class="text-white w-8 h-8 hover:text-rose-400 transition-colors cursor-pointer"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image 5 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="400">
+                    <div class="group relative overflow-hidden rounded-2xl aspect-[4/5]">
+                        <img src="https://images.unsplash.com/photo-1594913837482-1c251d1f057c?auto=format&fit=crop&q=80&w=800" alt="Nail Art 5" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-8">
+                            <i data-lucide="heart" class="text-white w-8 h-8 hover:text-rose-400 transition-colors cursor-pointer"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image 6 -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="500">
+                    <div class="group relative overflow-hidden rounded-2xl aspect-[4/5]">
+                        <img src="https://images.unsplash.com/photo-1588624132332-6bf59a1f3493?auto=format&fit=crop&q=80&w=800" alt="Nail Art 6" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-stone-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-8">
+                            <i data-lucide="heart" class="text-white w-8 h-8 hover:text-rose-400 transition-colors cursor-pointer"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-300 pt-24 pb-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
+                
+                <!-- Brand -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="0">
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-6 h-6 text-rose-400"></i>
+                            <span class="text-2xl font-serif font-bold tracking-wider text-white">
+                                ASP NAILS
+                            </span>
+                        </div>
+                        <p class="text-stone-400 leading-relaxed">
+                            Elevating your elegance through premium, personalized nail artistry. Where every detail matters.
+                        </p>
+                        <div class="flex gap-4">
+                            <a href="#" class="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all">
+                                <i data-lucide="instagram" class="w-5 h-5"></i>
+                            </a>
+                            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all">
+                                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="100">
+                    <div>
+                        <h4 class="text-white font-bold uppercase tracking-wider mb-6">Explore</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#home" class="hover:text-rose-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-4 h-4"></i> Home</a></li>
+                            <li><a href="#about" class="hover:text-rose-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-4 h-4"></i> About Artist</a></li>
+                            <li><a href="#services" class="hover:text-rose-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-4 h-4"></i> Our Services</a></li>
+                            <li><a href="#gallery" class="hover:text-rose-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="w-4 h-4"></i> Gallery Portfolio</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Hours -->
+                <div class="fade-in transition-all duration-1000 ease-out opacity-0" data-direction="up" data-delay="200">
+                    <div>
+                        <h4 class="text-white font-bold uppercase tracking-wider mb-6">Opening Hours</h4>
+                        <ul class="space-y-3">
+                            <li class="flex justify-between items-center border-b border-stone-800 pb-2">
+                                <span class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-stone-500"></i> Mon - Fri</span>
+                                <span>10:00 AM - 8:00 PM</span>
+                            </li>
+                            <li class="flex justify-between items-center border-b border-stone-800 pb-2">
+                                <span class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-stone-500"></i> Saturday</span>
+                                <span>10:00 AM - 9:00 PM</span>
+                            </li>
+                            <li class="flex justify-between items-center pb-2 text-rose-400">
+                                <span class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4"></i> Sunday</span>
+                                <span>Closed</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="border-t border-stone-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-stone-500">
+                <p>&copy; <span id="current-year"></span> Ankita Sil Pyne Nail Art. All rights reserved.</p>
+                <p>Designed with elegance.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript logic -->
+    <script>
+        // Set dynamic year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Navbar Scroll Logic
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('nav-scrolled');
+                nav.classList.remove('nav-top');
+            } else {
+                nav.classList.add('nav-top');
+                nav.classList.remove('nav-scrolled');
+            }
+        });
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const iconMenu = document.getElementById('icon-menu');
+        const iconX = document.getElementById('icon-x');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMobileMenuOpen = false;
+
+        function toggleMenu() {
+            isMobileMenuOpen = !isMobileMenuOpen;
+            if (isMobileMenuOpen) {
+                mobileMenu.classList.add('max-h-96', 'border-t', 'border-stone-100');
+                mobileMenu.classList.remove('max-h-0');
+                iconMenu.classList.add('hidden');
+                iconX.classList.remove('hidden');
+            } else {
+                mobileMenu.classList.remove('max-h-96', 'border-t', 'border-stone-100');
+                mobileMenu.classList.add('max-h-0');
+                iconMenu.classList.remove('hidden');
+                iconX.classList.add('hidden');
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+        // Intersection Observer for Scroll-Triggered Fade-In Effects
+        const observerOptions = {
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const delay = el.dataset.delay ? parseInt(el.dataset.delay) : 0;
+                    
+                    setTimeout(() => {
+                        // Remove initial transform and invisible states
+                        el.classList.remove('opacity-0', 'translate-y-12', '-translate-y-12', 'translate-x-12', '-translate-x-12');
+                        // Add final visible state
+                        el.classList.add('opacity-100', 'translate-y-0', 'translate-x-0');
+                    }, delay);
+                    
+                    observer.unobserve(el);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            // Apply initial off-screen positions based on requested direction
+            const direction = el.dataset.direction;
+            if (direction === 'up') el.classList.add('translate-y-12');
+            else if (direction === 'down') el.classList.add('-translate-y-12');
+            else if (direction === 'left') el.classList.add('translate-x-12');
+            else if (direction === 'right') el.classList.add('-translate-x-12');
+            else el.classList.add('translate-y-12'); // default to up
+            
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
